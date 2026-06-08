@@ -35,15 +35,15 @@ async function renderArticle() {
 
   root.innerHTML = `
     <header class="article-header">
-      ${statusLabel ? `<span class="tag">${statusLabel}</span>` : ""}
+      ${statusLabel ? `<span class="status-tag">${statusLabel}</span>` : ""}
       <h1>${meta.title || ""}</h1>
-      ${meta.summary ? `<p>${meta.summary}</p>` : ""}
+      ${meta.summary ? `<p class="article-summary">${meta.summary}</p>` : ""}
     </header>
     <div class="article-body">${bodyHtml}</div>
   `;
 
   if (meta.title) {
-    document.title = `${meta.title} — Pierre Dopavogui`;
+    document.title = `${meta.title} — Pierre Dopa`;
   }
 }
 

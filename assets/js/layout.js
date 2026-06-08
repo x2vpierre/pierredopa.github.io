@@ -1,46 +1,59 @@
 /*
- * Injecte un en-tête et un pied de page communs dans toutes les pages.
- * Chaque page place un <header id="site-header"></header> et
- * <footer id="site-footer"></footer> vides ; ce script les remplit,
- * pour ne maintenir la nav qu'à un seul endroit.
+ * Injecte un en-tête et un pied de page communs dans les pages intérieures
+ * (articles, outils, listing projets). La page d'accueil a son propre HTML
+ * complet et ne dépend pas de ce script pour sa nav.
+ *
+ * Chaque page intérieure inclut :
+ *   <header id="site-header"></header>
+ *   <footer id="site-footer"></footer>
+ *   <script src="/assets/js/layout.js">
+ *
+ * Pour modifier la navigation : changer NAV_LINKS ci-dessous.
  */
 
-const NAV_LINKS = [
-  { href: "/", label: "Accueil" },
+var NAV_LINKS = [
+  { href: "/",        label: "Accueil"  },
   { href: "/projets/", label: "Projets" },
   { href: "/#contact", label: "Contact" },
 ];
 
 function buildHeader(currentPath) {
-  const links = NAV_LINKS.map((link) => {
-    const isCurrent = link.href !== "/#contact" && currentPath === link.href;
-    const current = isCurrent ? ' aria-current="page"' : "";
-    return `<a href="${link.href}"${current}>${link.label}</a>`;
+  var links = NAV_LINKS.map(function (link) {
+    var isCurrent = link.href !== "/#contact" && currentPath === link.href;
+    var attr = isCurrent ? ' aria-current="page"' : "";
+    return '<a href="' + link.href + '"' + attr + '>' + link.label + "</a>";
   }).join("\n");
 
-  return `
-    <a class="site-header__name" href="/">Pierre Dopavogui</a>
-    <nav class="site-nav">${links}</nav>
-  `;
+  return (
+    '<div class="wrap nav-inner">' +
+      '<a class="brand" href="/">Pierre Dopa</a>' +
+      '<nav class="site-nav-links">' + links + "</nav>" +
+    "</div>"
+  );
 }
 
 function buildFooter() {
-  const year = new Date().getFullYear();
-  return `<p>© ${year} Pierre Dopavogui</p>`;
+  var year = new Date().getFullYear();
+  return (
+    '<div class="wrap">' +
+      "<p>Site personnel de Pierre Dopa.<br />" +
+      "© " + year + " Tous droits réservés.</p>" +
+    "</div>"
+  );
 }
 
-function renderLayout() {
-  const currentPath = window.location.pathname;
+document.addEventListener("DOMContentLoaded", function () {
+  var currentPath = window.location.pathname;
 
-  const header = document.getElementById("site-header");
+  var header = document.getElementById("site-header");
   if (header) {
+    header.className = "nav";
     header.innerHTML = buildHeader(currentPath);
   }
 
-  const footer = document.getElementById("site-footer");
+  var footer = document.getElementById("site-footer");
   if (footer) {
+    footer.className = "footer";
     footer.innerHTML = buildFooter();
   }
-}
-
-document.addEventListener("DOMContentLoaded", renderLayout);
+});

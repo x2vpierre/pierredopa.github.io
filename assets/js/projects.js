@@ -1,41 +1,95 @@
 /*
- * Affiche la liste des projets (case studies + outils) dans tout élément
- * portant l'attribut [data-project-list]. Lit window.projects, rempli par
- * projects-data.js, qui doit être chargé avant ce script.
+ * Affiche les projets dans deux formats :
  *
- * data-project-list="all" affiche tout, "case-study" ou "outil" filtre.
+ * [data-project-grid]   — cartes alternées avec image et frame, pour la home.
+ *   Chaque projet pair est en .reverse (texte à gauche).
+ *   Filtre : "all" | "case-study" | "outil"
+ *
+ * [data-project-list]   — liste simple avec statut, pour /projets/.
+ *   Filtre : "all" | "case-study" | "outil"
+ *
+ * Dépend de window.projects et window.STATUS_LABELS (projects-data.js).
  */
 
-function projectCard(project) {
-  const statusLabel = window.STATUS_LABELS[project.status] || project.status;
-  const typeLabel = project.type === "case-study" ? "Case study" : "Outil";
+/* ---- format home : grille alternée avec frame ---- */
+function projectGridCard(project, index) {
+  var isReverse = index % 2 !== 0;
+  var reverseClass = isReverse ? " reverse" : "";
+  var statusLabel = window.STATUS_LABELS[project.status] || project.status;
+  var imgSrc = project.image || "";
 
-  const titleMarkup = project.href
-    ? `<h3><a href="${project.href}">${project.title}</a></h3>`
-    : `<h3>${project.title}</h3>`;
+  var media = project.href
+    ? '<a href="' + project.href + '">' +
+        '<div class="frame">' +
+          '<div class="frame-bar"><span></span><span></span><span></span></div>' +
+          '<img src="' + imgSrc + '" alt="Aperçu — ' + project.title + '" />' +
+        "</div>" +
+      "</a>"
+    : '<div class="frame">' +
+        '<div class="frame-bar"><span></span><span></span><span></span></div>' +
+        '<img src="' + imgSrc + '" alt="" />' +
+      "</div>";
 
-  return `
-    <li class="project-card">
-      <div class="project-card__header">
-        ${titleMarkup}
-        <span class="tag">${statusLabel}</span>
-      </div>
-      <p>${typeLabel} — ${project.summary}</p>
-    </li>
-  `;
+  var btn = project.href
+    ? '<a class="btn" href="' + project.href + '">Voir le projet</a>'
+    : '<span class="btn inactive">' + statusLabel + "</span>";
+
+  return (
+    '<div class="project' + reverseClass + ' wrap">' +
+      '<div class="project-grid">' +
+        '<div class="project-media">' + media + "</div>" +
+        '<div class="project-text">' +
+          '<h2 class="project-title">' + project.title + "</h2>" +
+          '<p class="project-desc">' + project.summary + "</p>" +
+          btn +
+        "</div>" +
+      "</div>" +
+    "</div>"
+  );
 }
 
-function renderProjectLists() {
-  const containers = document.querySelectorAll("[data-project-list]");
+/* ---- format listing : ligne simple avec statut ---- */
+function projectListItem(project) {
+  var statusLabel = window.STATUS_LABELS[project.status] || project.status;
+  var typeLabel = project.type === "case-study" ? "Case study" : "Outil";
 
-  containers.forEach((container) => {
-    const filter = container.getAttribute("data-project-list");
-    const projects = window.projects.filter(
-      (project) => filter === "all" || project.type === filter
-    );
+  var titleHtml = project.href
+    ? '<a href="' + project.href + '">' + project.title + "</a>"
+    : project.title;
 
-    container.innerHTML = projects.map(projectCard).join("\n");
+  return (
+    '<li class="project-item">' +
+      "<div>" +
+        '<div class="project-item__title">' + titleHtml + "</div>" +
+        '<div class="project-item__desc">' + project.summary + "</div>" +
+      "</div>" +
+      '<div class="project-item__meta">' +
+        '<span class="type-tag">' + typeLabel + "</span>" +
+        '<span class="status-tag">' + statusLabel + "</span>" +
+      "</div>" +
+    "</li>"
+  );
+}
+
+/* ---- rendu ---- */
+function renderProjects() {
+  /* Grille home */
+  document.querySelectorAll("[data-project-grid]").forEach(function (container) {
+    var filter = container.getAttribute("data-project-grid");
+    var list = window.projects.filter(function (p) {
+      return filter === "all" || p.type === filter;
+    });
+    container.innerHTML = list.map(projectGridCard).join("\n");
+  });
+
+  /* Liste simple */
+  document.querySelectorAll("[data-project-list]").forEach(function (container) {
+    var filter = container.getAttribute("data-project-list");
+    var list = window.projects.filter(function (p) {
+      return filter === "all" || p.type === filter;
+    });
+    container.innerHTML = list.map(projectListItem).join("\n");
   });
 }
 
-document.addEventListener("DOMContentLoaded", renderProjectLists);
+document.addEventListener("DOMContentLoaded", renderProjects);

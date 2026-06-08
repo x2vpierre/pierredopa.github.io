@@ -2,58 +2,107 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Pierre Dopavogui</title>
+  <title>Pierre Dopa — Recruteur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body>
-  <header id="site-header" class="site-header"></header>
+  <canvas id="chaosCanvas"></canvas>
 
-  <main>
-    <section class="hero">
-      <h1>Pierre Dopavogui</h1>
-      <p>
-        [Phrase d'accroche provisoire — recruteur, IA, psychologie du travail :
-        à affiner ensemble une fois le site en place.]
-      </p>
-      <div class="hero__illustration" aria-hidden="true">
-        <!-- Illustration au trait à venir -->
+  <div id="contentContainer">
+
+    <!-- ========================== NAV ========================== -->
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="#top">Pierre Dopa</a>
+        <label class="chaos" title="Dessinez partout sur la page">
+          <span class="switch">
+            <input type="checkbox" id="chaosToggle" />
+            <span class="track"></span>
+            <span class="knob"></span>
+          </span>
+          <span class="chaos-label">Activer le chaos</span>
+        </label>
+      </div>
+    </header>
+
+    <!-- ========================= HERO ========================= -->
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div class="hero-text">
+          <h1 class="hero-headline">
+            Je suis <span class="mark mark-lasso">recruteur<svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><path class="lasso-path" d="M22,46 C18,18 95,9 168,11 C246,13 290,24 286,47 C282,73 196,82 120,80 C56,78 14,70 26,42 C30,33 50,28 70,26" /></svg></span>
+            et je révèle les <span class="mark mark-squiggle">bons talents<svg viewBox="0 0 260 16" preserveAspectRatio="none" aria-hidden="true"><path class="squiggle-path" d="M4,9 Q20,1 36,9 T68,9 T100,9 T132,9 T164,9 T196,9 T228,9 T256,9" /></svg></span>.
+          </h1>
+          <p class="hero-desc">
+            Découvrez mes <a href="#projets">projets et outils</a>,
+            retrouvez-moi sur <a class="tw" href="#" target="_blank" rel="noopener">LinkedIn</a> /
+            <a href="#" target="_blank" rel="noopener">Instagram</a>,
+            ou <a href="mailto:bonjour@pierredopa.com">écrivez-moi</a> pour dire bonjour.
+          </p>
+        </div>
+        <div class="hero-art">
+          <!-- TODO : déposer l'illustration dans /assets/illustration.svg -->
+          <img src="/assets/illustration.svg" alt="Illustration de Pierre Dopa" />
+        </div>
       </div>
     </section>
 
-    <section aria-labelledby="intro-heading">
-      <h2 id="intro-heading">En quelques mots</h2>
-      <p>
-        [Paragraphe de présentation provisoire. Qui je suis, ce que je fais,
-        pourquoi ce site existe — un espace pour aller plus loin que
-        LinkedIn ou Instagram pour qui veut creuser.]
-      </p>
-    </section>
+    <!-- ======================== PROJETS ======================== -->
+    <div class="projects" id="projets" data-project-grid="all"></div>
 
-    <section aria-labelledby="projects-heading">
-      <h2 id="projects-heading">Projets</h2>
-      <p>
-        Des carnets de bord honnêtes sur la façon dont je construis mes
-        outils, et des applications IA accessibles directement ici.
-      </p>
-      <ul class="project-list" data-project-list="all"></ul>
-      <p><a href="/projets/">Voir tous les projets →</a></p>
-    </section>
+    <!-- ======================== À PROPOS ======================== -->
+    <div class="section" id="apropos">
+      <div class="wrap">
+        <div class="about-head">
+          <h2>À propos</h2>
+          <span class="about-stamp">(ennuyeux)</span>
+        </div>
+        <div class="about-cols">
+          <p>
+            [Texte de présentation à compléter — parcours de recruteur,
+            façon d'accompagner talents et entreprises pour construire des
+            équipes qui produisent de la valeur.]
+          </p>
+          <p>
+            [Second paragraphe, plus personnel — sujets qui me passionnent,
+            ou l'endroit où l'on peut me croiser un bon jour.]
+          </p>
+        </div>
+      </div>
+    </div>
 
-    <section id="contact" aria-labelledby="contact-heading">
-      <h2 id="contact-heading">Contact</h2>
-      <p>
-        [Section contact provisoire — lien LinkedIn, e-mail, ou autre moyen
-        de me joindre, à préciser.]
-      </p>
-    </section>
-  </main>
+    <!-- ======================== CONTACT ======================== -->
+    <div class="contact" id="contact">
+      <div class="wrap">
+        <h2>Écrivez-moi <a href="mailto:bonjour@pierredopa.com">un email</a></h2>
+      </div>
+    </div>
 
-  <footer id="site-footer" class="site-footer"></footer>
+    <!-- ======================== FOOTER ======================== -->
+    <div class="footer">
+      <div class="wrap">
+        <p>Site personnel de Pierre Dopa.<br />© <span id="year">2026</span> Tous droits réservés.</p>
+      </div>
+    </div>
+
+  </div><!-- #contentContainer -->
+
+  <!-- =================== PALETTE DE GRIBOUILLAGE =================== -->
+  <nav id="paintBoard" aria-label="Couleurs de dessin">
+    <button data-color="#FE8A8A" style="background:#FE8A8A" title="Corail"></button>
+    <button data-color="#9AF2E2" style="background:#9AF2E2" title="Menthe"></button>
+    <button data-color="#AEDFFD" style="background:#AEDFFD" title="Bleu"></button>
+    <button data-color="#050505" style="background:#050505" title="Noir"></button>
+    <span class="paint-hint">← dessinez !</span>
+  </nav>
 
   <script src="/assets/js/projects-data.js"></script>
   <script src="/assets/js/projects.js"></script>
-  <script src="/assets/js/layout.js"></script>
+  <script src="/assets/js/chaos.js"></script>
 </body>
 </html>
