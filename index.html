@@ -11,98 +11,76 @@
   <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body>
-  <canvas id="chaosCanvas"></canvas>
+  <!-- ========================== NAV ========================== -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">Pierre Dopa</a>
+    </div>
+  </header>
 
-  <div id="contentContainer">
-
-    <!-- ========================== NAV ========================== -->
-    <header class="nav">
-      <div class="wrap nav-inner">
-        <a class="brand" href="#top">Pierre Dopa</a>
-        <label class="chaos" title="Dessinez partout sur la page">
-          <span class="switch">
-            <input type="checkbox" id="chaosToggle" />
-            <span class="track"></span>
-            <span class="knob"></span>
-          </span>
-          <span class="chaos-label">Activer le chaos</span>
-        </label>
+  <!-- ========================= HERO ========================= -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <h1 class="hero-headline">
+          Je suis <span class="mark mark-lasso">recruteur<svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><path class="lasso-path" d="M22,46 C18,18 95,9 168,11 C246,13 290,24 286,47 C282,73 196,82 120,80 C56,78 14,70 26,42 C30,33 50,28 70,26" /></svg></span>
+          et je révèle les <span class="mark mark-squiggle">bons talents<svg viewBox="0 0 260 16" preserveAspectRatio="none" aria-hidden="true"><path class="squiggle-path" d="M4,9 Q20,1 36,9 T68,9 T100,9 T132,9 T164,9 T196,9 T228,9 T256,9" /></svg></span>.
+        </h1>
+        <p class="hero-desc">
+          Découvrez mes <a href="#projets">projets et outils</a>,
+          retrouvez-moi sur <a class="tw" href="#" target="_blank" rel="noopener">LinkedIn</a> /
+          <a href="#" target="_blank" rel="noopener">Instagram</a>,
+          ou <a href="mailto:bonjour@pierredopa.com">écrivez-moi</a> pour dire bonjour.
+        </p>
       </div>
-    </header>
-
-    <!-- ========================= HERO ========================= -->
-    <section class="hero" id="top">
-      <div class="wrap hero-grid">
-        <div class="hero-text">
-          <h1 class="hero-headline">
-            Je suis <span class="mark mark-lasso">recruteur<svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><path class="lasso-path" d="M22,46 C18,18 95,9 168,11 C246,13 290,24 286,47 C282,73 196,82 120,80 C56,78 14,70 26,42 C30,33 50,28 70,26" /></svg></span>
-            et je révèle les <span class="mark mark-squiggle">bons talents<svg viewBox="0 0 260 16" preserveAspectRatio="none" aria-hidden="true"><path class="squiggle-path" d="M4,9 Q20,1 36,9 T68,9 T100,9 T132,9 T164,9 T196,9 T228,9 T256,9" /></svg></span>.
-          </h1>
-          <p class="hero-desc">
-            Découvrez mes <a href="#projets">projets et outils</a>,
-            retrouvez-moi sur <a class="tw" href="#" target="_blank" rel="noopener">LinkedIn</a> /
-            <a href="#" target="_blank" rel="noopener">Instagram</a>,
-            ou <a href="mailto:bonjour@pierredopa.com">écrivez-moi</a> pour dire bonjour.
-          </p>
-        </div>
-        <div class="hero-art">
-          <!-- TODO : déposer l'illustration dans /assets/illustration.svg -->
-          <img src="/assets/illustration.svg" alt="Illustration de Pierre Dopa" />
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================== PROJETS ======================== -->
-    <div class="projects" id="projets" data-project-grid="all"></div>
-
-    <!-- ======================== À PROPOS ======================== -->
-    <div class="section" id="apropos">
-      <div class="wrap">
-        <div class="about-head">
-          <h2>À propos</h2>
-          <span class="about-stamp">(ennuyeux)</span>
-        </div>
-        <div class="about-cols">
-          <p>
-            [Texte de présentation à compléter — parcours de recruteur,
-            façon d'accompagner talents et entreprises pour construire des
-            équipes qui produisent de la valeur.]
-          </p>
-          <p>
-            [Second paragraphe, plus personnel — sujets qui me passionnent,
-            ou l'endroit où l'on peut me croiser un bon jour.]
-          </p>
-        </div>
+      <div class="hero-art">
+        <img src="/assets/illustration.png" alt="Illustration de Pierre Dopa" />
       </div>
     </div>
+  </section>
 
-    <!-- ======================== CONTACT ======================== -->
-    <div class="contact" id="contact">
-      <div class="wrap">
-        <h2>Écrivez-moi <a href="mailto:bonjour@pierredopa.com">un email</a></h2>
+  <!-- ======================== PROJETS ======================== -->
+  <div class="projects" id="projets" data-project-grid="all"></div>
+
+  <!-- ======================== À PROPOS ======================== -->
+  <div class="section" id="apropos">
+    <div class="wrap">
+      <div class="about-head">
+        <h2>À propos</h2>
+        <span class="about-stamp">(ennuyeux)</span>
+      </div>
+      <div class="about-cols">
+        <p>
+          [Texte de présentation à compléter — parcours de recruteur,
+          façon d'accompagner talents et entreprises pour construire des
+          équipes qui produisent de la valeur.]
+        </p>
+        <p>
+          [Second paragraphe, plus personnel — sujets qui me passionnent,
+          ou l'endroit où l'on peut me croiser un bon jour.]
+        </p>
       </div>
     </div>
+  </div>
 
-    <!-- ======================== FOOTER ======================== -->
-    <div class="footer">
-      <div class="wrap">
-        <p>Site personnel de Pierre Dopa.<br />© <span id="year">2026</span> Tous droits réservés.</p>
-      </div>
+  <!-- ======================== CONTACT ======================== -->
+  <div class="contact" id="contact">
+    <div class="wrap">
+      <h2>Écrivez-moi <a href="mailto:bonjour@pierredopa.com">un email</a></h2>
     </div>
+  </div>
 
-  </div><!-- #contentContainer -->
+  <!-- ======================== FOOTER ======================== -->
+  <div class="footer">
+    <div class="wrap">
+      <p>Site personnel de Pierre Dopa.<br />© <span id="year">2026</span> Tous droits réservés.</p>
+    </div>
+  </div>
 
-  <!-- =================== PALETTE DE GRIBOUILLAGE =================== -->
-  <nav id="paintBoard" aria-label="Couleurs de dessin">
-    <button data-color="#FE8A8A" style="background:#FE8A8A" title="Corail"></button>
-    <button data-color="#9AF2E2" style="background:#9AF2E2" title="Menthe"></button>
-    <button data-color="#AEDFFD" style="background:#AEDFFD" title="Bleu"></button>
-    <button data-color="#050505" style="background:#050505" title="Noir"></button>
-    <span class="paint-hint">← dessinez !</span>
-  </nav>
-
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
   <script src="/assets/js/projects-data.js"></script>
   <script src="/assets/js/projects.js"></script>
-  <script src="/assets/js/chaos.js"></script>
 </body>
 </html>
