@@ -126,7 +126,7 @@ img:not([src]), img[src=""] { background: #f1f2f4; }
 @media (max-width: 860px) {
   .hero-art  { order: -1; }
   .hero-text { order:  0; }
-  .hero-art img { max-width: 280px; margin-inline: auto; }
+  .hero-art img { max-width: 308px; margin-inline: auto; }
 }
 
 /* =========================================================================
