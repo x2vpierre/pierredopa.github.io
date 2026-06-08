@@ -62,14 +62,14 @@ p   { margin: 0; }
 /* =========================================================================
    4. Nav — home (chaos toggle) et pages intérieures (via layout.js)
    ========================================================================= */
-.nav { padding-top: clamp(28px, 5vh, 48px); padding-bottom: clamp(12px, 2vh, 20px); }
+.nav { padding-top: clamp(24px, 4vh, 40px); }
 .nav-inner {
   display: flex; align-items: center;
-  justify-content: center; gap: 16px;
+  justify-content: space-between; gap: 16px;
 }
 .brand {
   font-family: var(--font-display); font-weight: 700;
-  font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -.02em;
+  font-size: clamp(20px, 2.2vw, 26px); letter-spacing: -.01em;
 }
 
 /* Nav pages intérieures */
@@ -86,19 +86,19 @@ p   { margin: 0; }
    5. Hero
    ========================================================================= */
 .hero {
-  min-height: 78vh; display: flex; align-items: center;
-  padding: clamp(40px, 7vh, 90px) 0;
+  min-height: 80vh; display: flex; align-items: flex-start;
+  padding: clamp(40px, 8vh, 80px) 0;
 }
 .hero-grid {
-  display: grid; grid-template-columns: 1.15fr .85fr;
+  display: grid; grid-template-columns: 1fr 1fr;
   gap: clamp(30px, 5vw, 60px); align-items: center; width: 100%;
 }
 @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
 
 .hero-headline {
   font-family: var(--font-display); font-weight: 500;
-  font-size: clamp(44px, 6vw, 76px); line-height: 1.4;
-  letter-spacing: -.02em;
+  font-size: clamp(36px, 4.6vw, 56px); line-height: 1.45;
+  letter-spacing: -.015em;
 }
 
 /* Marques dessinées */
@@ -118,15 +118,15 @@ p   { margin: 0; }
 .hero-desc a:hover   { color: var(--blue); }
 .hero-desc a.tw:hover { color: var(--mint); }
 
-.hero-art { display: flex; justify-content: center; align-items: flex-end; }
-.hero-art img { width: 100%; max-width: 480px; object-fit: contain; }
+.hero-art { display: flex; justify-content: flex-end; align-items: flex-start; }
+.hero-art img { width: 100%; max-width: 580px; object-fit: contain; }
 img:not([src]), img[src=""] { background: #f1f2f4; }
 
 /* Image en premier sur mobile */
 @media (max-width: 860px) {
-  .hero-art  { order: -1; }
+  .hero-art  { order: -1; justify-content: center; }
   .hero-text { order:  0; }
-  .hero-art img { max-width: 308px; margin-inline: auto; }
+  .hero-art img { max-width: 308px; }
 }
 
 /* =========================================================================
