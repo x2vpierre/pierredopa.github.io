@@ -86,12 +86,12 @@ p   { margin: 0; }
    5. Hero
    ========================================================================= */
 .hero {
-  min-height: 80vh; display: flex; align-items: flex-start;
+  min-height: 80vh; display: flex; align-items: center;
   padding: clamp(40px, 8vh, 80px) 0;
 }
 .hero-grid {
-  display: grid; grid-template-columns: 1.35fr 0.65fr;
-  gap: clamp(30px, 5vw, 60px); align-items: flex-start; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(30px, 5vw, 60px); align-items: center; width: 100%;
 }
 @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
 
@@ -118,8 +118,8 @@ p   { margin: 0; }
 .hero-desc a:hover   { color: var(--blue); }
 .hero-desc a.tw:hover { color: var(--mint); }
 
-.hero-art { display: flex; justify-content: flex-end; align-items: flex-start; }
-.hero-art img { width: 100%; max-width: 580px; object-fit: contain; }
+.hero-art { display: flex; justify-content: flex-end; align-items: center; }
+.hero-art img { width: 100%; max-width: 100%; object-fit: contain; }
 img:not([src]), img[src=""] { background: #f1f2f4; }
 
 /* ---- Mobile ---- */
