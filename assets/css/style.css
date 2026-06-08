@@ -122,11 +122,24 @@ p   { margin: 0; }
 .hero-art img { width: 100%; max-width: 580px; object-fit: contain; }
 img:not([src]), img[src=""] { background: #f1f2f4; }
 
-/* Image en premier sur mobile */
+/* ---- Mobile ---- */
 @media (max-width: 860px) {
+  /* Titre centré et plus grand */
+  .nav { padding-top: 20px; padding-bottom: 4px; }
+  .nav-inner { justify-content: center; }
+  .brand { font-size: 26px; }
+
+  /* Moins d'écart entre titre et image */
+  .hero { padding: 14px 0 40px; min-height: unset; }
+
+  /* Image en premier, +20% */
   .hero-art  { order: -1; justify-content: center; }
   .hero-text { order:  0; }
-  .hero-art img { max-width: 308px; }
+  .hero-art img { max-width: 370px; }
+
+  /* Headline et description pleine largeur */
+  .hero-headline { font-size: clamp(26px, 7vw, 34px); }
+  .hero-desc     { font-size: 18px; }
 }
 
 /* =========================================================================
