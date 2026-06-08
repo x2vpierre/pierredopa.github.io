@@ -97,7 +97,7 @@ p   { margin: 0; }
 
 .hero-headline {
   font-family: var(--font-display); font-weight: 500;
-  font-size: clamp(26px, 3vw, 40px); line-height: 1.5;
+  font-size: clamp(20px, 2.2vw, 30px); line-height: 1.55;
   letter-spacing: -.015em;
 }
 
