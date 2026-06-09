@@ -32,7 +32,7 @@ function projectGridCard(project, index) {
 
   var btn = project.href
     ? '<a class="btn" href="' + project.href + '">Voir le projet</a>'
-    : '<span class="btn inactive">' + statusLabel + "</span>";
+    : "";
 
   return (
     '<div class="project' + reverseClass + ' wrap">' +
@@ -65,7 +65,6 @@ function projectListItem(project) {
       "</div>" +
       '<div class="project-item__meta">' +
         '<span class="type-tag">' + typeLabel + "</span>" +
-        '<span class="status-tag">' + statusLabel + "</span>" +
       "</div>" +
     "</li>"
   );
