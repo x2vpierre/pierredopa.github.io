@@ -13,7 +13,6 @@
 
 var NAV_LINKS = [
   { href: "/",        label: "Accueil"  },
-  { href: "/projets/", label: "Projets" },
   { href: "/#contact", label: "Contact" },
 ];
 
