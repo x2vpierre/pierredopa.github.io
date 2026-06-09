@@ -1,19 +1,21 @@
 /*
  * Charge et affiche un case study écrit en Markdown.
- * La page hôte définit <main data-article-source="contenu.md"> et un
- * conteneur <div id="article-root">. Ce script va chercher le fichier,
- * sépare le front-matter (titre, statut, résumé...) du corps, puis
- * injecte le rendu HTML.
+ * Le wrapper définit data-article-source="contenu.md".
+ * Injecte le rendu complet (header, body, footer) dans #article-root.
  *
- * Dépend de markdown.js (window.markdown), à charger avant ce script.
+ * Front-matter supporté :
+ *   title, status, kicker, date, reading_time, summary
+ *
+ * Dépend de markdown.js (window.markdown) et projects-data.js,
+ * à charger avant ce script.
  */
 
 async function renderArticle() {
   const root = document.getElementById("article-root");
   if (!root) return;
 
-  const main = root.closest("main");
-  const source = main ? main.getAttribute("data-article-source") : null;
+  const wrapper = document.querySelector("[data-article-source]");
+  const source = wrapper ? wrapper.getAttribute("data-article-source") : null;
   if (!source) return;
 
   let text;
@@ -29,17 +31,30 @@ async function renderArticle() {
   const { meta, body } = window.markdown.parseFrontMatter(text);
   const bodyHtml = window.markdown.parseMarkdown(body);
 
-  const statusLabel = window.STATUS_LABELS
-    ? window.STATUS_LABELS[meta.status] || meta.status
-    : meta.status;
+  const kicker     = meta.kicker       || "";
+  const dateStr    = meta.date         || "";
+  const readingTime = meta.reading_time || "";
+
+  const metaHtml = (dateStr || readingTime) ? `
+    <div class="art-meta">
+      ${dateStr ? `<span>${dateStr}</span>` : ""}
+      ${dateStr && readingTime ? `<span class="art-dot"></span>` : ""}
+      ${readingTime ? `<span>${readingTime}</span>` : ""}
+    </div>` : "";
 
   root.innerHTML = `
-    <header class="article-header">
-      ${statusLabel ? `<span class="status-tag">${statusLabel}</span>` : ""}
-      <h1>${meta.title || ""}</h1>
-      ${meta.summary ? `<p class="article-summary">${meta.summary}</p>` : ""}
+    <header class="art-head">
+      ${kicker ? `<span class="art-kicker">${kicker}</span>` : ""}
+      <h1 class="art-title">${meta.title || ""}</h1>
+      ${metaHtml}
     </header>
-    <div class="article-body">${bodyHtml}</div>
+    <div class="art-body">
+      ${meta.summary ? `<p class="art-intro">${meta.summary}</p>` : ""}
+      ${bodyHtml}
+    </div>
+    <footer class="art-foot">
+      <p class="art-foot-cta">Envie d&rsquo;en parler ?&thinsp;<a href="mailto:bonjour@pierredopa.com">Écrivez-moi</a>.</p>
+    </footer>
   `;
 
   if (meta.title) {
@@ -47,4 +62,8 @@ async function renderArticle() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", renderArticle);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", renderArticle);
+} else {
+  renderArticle();
+}

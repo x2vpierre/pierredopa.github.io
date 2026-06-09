@@ -1,6 +1,9 @@
 ---
 title: Entretiens structurés — comment j'ai arrêté de recruter au feeling
 status: disponible
+kicker: Case study
+date: Juin 2026
+reading_time: 4 min de lecture
 summary: Aujourd'hui je sors d'un entretien avec un avis que je peux défendre point par point face à un manager. Je vois des choses que je ne voyais pas avant. Et ma qualité d'analyse ne dépend plus de mon humeur du vendredi soir.
 ---
 
