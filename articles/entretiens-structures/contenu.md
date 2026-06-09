@@ -4,8 +4,6 @@ status: disponible
 summary: Aujourd'hui je sors d'un entretien avec un avis que je peux défendre point par point face à un manager. Je vois des choses que je ne voyais pas avant. Et ma qualité d'analyse ne dépend plus de mon humeur du vendredi soir.
 ---
 
-Aujourd'hui je sors d'un entretien avec un avis que je peux défendre point par point face à un manager commercial. Je vois des choses que je ne voyais pas avant. Et ma qualité d'analyse ne dépend plus de mon humeur du vendredi soir.
-
 ## Le problème de départ
 
 Mes entretiens ne mesuraient rien. Je posais des questions, je prenais des notes, je donnais un avis. Mais si on m'avait demandé de justifier cet avis de manière rigoureuse, j'aurais eu du mal. La littérature est unanime là-dessus : un entretien non structuré n'a quasiment aucune valeur prédictive. Je le savais. Je l'appliquais mal.
