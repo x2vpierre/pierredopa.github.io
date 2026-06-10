@@ -116,9 +116,9 @@ function renderToolCard(project) {
   var blob = "M 0.52 0.05 C 0.78 0.00 0.97 0.21 0.95 0.46 C 0.93 0.69 0.76 0.92 0.55 0.94 C 0.34 0.96 0.04 0.79 0.05 0.53 C 0.06 0.27 0.22 0.08 0.52 0.05 Z";
   var fogOpacity = (c.fog / 100 * 0.85).toFixed(2);
   var fog = "radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0," + fogOpacity + ") 100%)";
-  var t3d = "translateY(-14%) perspective(600px) rotateX(" + c.depthY + "deg) rotateY(" + c.depthX + "deg) rotateZ(" + c.tiltAngle + "deg)";
+  var t3d = "perspective(800px) rotateX(" + c.depthY + "deg) rotateY(" + c.depthX + "deg) rotateZ(" + c.tiltAngle + "deg)";
   var imgHtml = c.screenshot
-    ? '<img src="' + c.screenshot + '" alt="" style="width:150%;height:150%;object-fit:cover;flex-shrink:0;transform:' + t3d + ';transform-origin:center center" />'
+    ? '<img src="' + c.screenshot + '" alt="" style="width:125%;height:125%;object-fit:cover;flex-shrink:0;transform:' + t3d + ';transform-origin:center center" />'
     : "";
   var windowHtml =
     '<div style="width:' + c.windowSize + 'px;height:' + c.windowSize + 'px;clip-path:url(#' + uid + ');overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative">' +
