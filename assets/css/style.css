@@ -351,6 +351,10 @@ section[id], div[id].section { scroll-margin-top: 30px; }
 .project.reverse .project-media {
   justify-content: flex-end;
 }
+/* Layout quand la card inclut son propre texte (withText=true) */
+.project-card-only {
+  padding: clamp(36px, 7vh, 80px) 0;
+}
 .tool-card {
   width: 280px;
   flex-shrink: 0;

@@ -23,34 +23,70 @@ function renderToolCard(project) {
              "C 0.06 0.27 0.22 0.08 0.52 0.05 Z";
 
   var fogOpacity = (c.fog / 100 * 0.85).toFixed(2);
-  var fog = "radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0," + fogOpacity + ") 100%)";
-  var t3d = "perspective(600px) rotateX(" + c.depthY + "deg) rotateY(" + c.depthX + "deg) rotateZ(" + c.tiltAngle + "deg)";
+  var fog = "radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0," + fogOpacity + ") 100%)";
+
+  /* translateY négatif = remonte l'image → révèle la partie basse (le tableau) */
+  var t3d = "translateY(-14%) perspective(600px) rotateX(" + c.depthY + "deg) rotateY(" + c.depthX + "deg) rotateZ(" + c.tiltAngle + "deg)";
 
   var imgHtml = c.screenshot
     ? '<img src="' + c.screenshot + '" alt="" style="' +
-        'width:120%;height:120%;object-fit:cover;flex-shrink:0;' +
+        'width:150%;height:150%;object-fit:cover;flex-shrink:0;' +
         'transform:' + t3d + ';transform-origin:center center' +
       '" />'
     : "";
 
+  var windowHtml =
+    '<div style="' +
+      'width:' + c.windowSize + 'px;height:' + c.windowSize + 'px;' +
+      'clip-path:url(#' + uid + ');overflow:hidden;' +
+      'display:flex;align-items:center;justify-content:center;position:relative' +
+    '">' +
+      imgHtml +
+      '<div style="position:absolute;inset:0;background:' + fog + ';pointer-events:none"></div>' +
+    '</div>';
+
+  /* --- Zone texte (withText) ------------------------------------------- */
+  var textHtml = "";
+  if (c.withText) {
+    var title  = (c.title  || project.title).toUpperCase();
+    var desc   = c.description || project.summary;
+    var cta    = c.ctaLabel || "Lire →";
+    var ctaHref = c.ctaHref || project.href || "#";
+
+    textHtml =
+      '<div style="padding:18px 22px 0;text-align:center;width:100%;">' +
+        '<div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;' +
+             'letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:8px;line-height:1.3;">' +
+          title +
+        '</div>' +
+        '<p style="font-family:Mulish,sans-serif;font-size:13px;line-height:1.5;' +
+           'color:rgba(255,255,255,.82);margin:0 0 16px;">' +
+          desc +
+        '</p>' +
+        '<a href="' + ctaHref + '" style="display:inline-flex;align-items:center;gap:6px;' +
+           'font-family:Poppins,sans-serif;font-size:13px;font-weight:600;' +
+           'color:' + c.cardColor + ';background:#fff;border-radius:999px;' +
+           'padding:9px 22px;text-decoration:none;">' +
+          cta +
+        '</a>' +
+      '</div>';
+  }
+
+  var pad = c.withText ? "24px 24px 28px" : "32px";
+
   return (
-    '<div class="tool-card" style="background:' + c.cardColor + ';border-radius:' + c.cardRadius + 'px">' +
+    '<div class="tool-card" style="background:' + c.cardColor + ';border-radius:' + c.cardRadius + 'px;' +
+         'padding:' + pad + ';flex-direction:column;">' +
       '<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">' +
         '<defs>' +
           '<clipPath id="' + uid + '" clipPathUnits="objectBoundingBox">' +
             '<path d="' + blob + '"/>' +
-          "</clipPath>" +
-        "</defs>" +
-      "</svg>" +
-      '<div style="' +
-        'width:' + c.windowSize + 'px;height:' + c.windowSize + 'px;' +
-        'clip-path:url(#' + uid + ');overflow:hidden;' +
-        'display:flex;align-items:center;justify-content:center;position:relative' +
-      '">' +
-        imgHtml +
-        '<div style="position:absolute;inset:0;background:' + fog + ';pointer-events:none"></div>' +
-      "</div>" +
-    "</div>"
+          '</clipPath>' +
+        '</defs>' +
+      '</svg>' +
+      windowHtml +
+      textHtml +
+    '</div>'
   );
 }
 
@@ -60,10 +96,13 @@ function projectGridCard(project, index) {
   var reverseClass = isReverse ? " reverse" : "";
   var imgSrc = project.image || "";
 
+  /* Rendu du media */
   var media = "";
   if (project.card) {
     var cardHtml = renderToolCard(project);
-    media = project.href
+    /* withText : la card est cliquable entière (le lien est à l'intérieur du textHtml),
+       ou on l'enveloppe dans un <a> si c'est withText=false */
+    media = (project.href && !project.card.withText)
       ? '<a href="' + project.href + '" style="display:block">' + cardHtml + "</a>"
       : cardHtml;
   } else if (imgSrc) {
@@ -78,6 +117,15 @@ function projectGridCard(project, index) {
           '<div class="frame-bar"><span></span><span></span><span></span></div>' +
           '<img src="' + imgSrc + '" alt="" />' +
         "</div>";
+  }
+
+  /* withText : carte autonome, pas de colonne texte à côté */
+  if (project.card && project.card.withText) {
+    return (
+      '<div class="project wrap">' +
+        '<div class="project-card-only">' + media + '</div>' +
+      '</div>'
+    );
   }
 
   var btn = project.href
