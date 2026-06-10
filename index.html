@@ -82,7 +82,23 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
-  <script src="/assets/js/projects-data.js?v=2"></script>
+  <script>
+    window.projects = [
+      {
+        type: "case-study", slug: "entretiens-structures",
+        title: "Entretiens structurés",
+        summary: "Comment j'ai arrêté de recruter au feeling — la grille, les ancres comportementales, ce que ça a changé.",
+        status: "disponible", href: "/articles/entretiens-structures/", image: null,
+      },
+      {
+        type: "case-study", slug: "ariane",
+        title: "Ariane",
+        summary: "Un agent IA construit pour des recruteurs qui n'ouvraient jamais ChatGPT. Ce que ça m'a appris sur l'adoption.",
+        status: "disponible", href: "/articles/ariane/", image: null,
+      },
+    ];
+    window.STATUS_LABELS = { "disponible": "Disponible", "en-construction": "En construction", "vision": "Vision long terme" };
+  </script>
   <script src="/assets/js/projects.js?v=2"></script>
 </body>
 </html>
