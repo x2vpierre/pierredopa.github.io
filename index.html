@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/style.css?v=2" />
 </head>
 <body>
   <!-- ========================== NAV ========================== -->
@@ -162,7 +162,7 @@ function projectGridCard(project, index) {
       : '<div class="frame"><div class="frame-bar"><span></span><span></span><span></span></div><img src="' + imgSrc + '" alt="" /></div>';
   }
   if (project.card && project.card.withText) {
-    return '<div class="project wrap"><div class="project-card-only">' + media + '</div></div>';
+    return '<div class="project wrap"><div class="project-card-only" style="display:flex;justify-content:center;">' + media + '</div></div>';
   }
   var btn = project.href ? '<a class="btn" href="' + project.href + '">Voir le projet</a>' : "";
   return (
