@@ -341,38 +341,6 @@ section[id], div[id].section { scroll-margin-top: 30px; }
 }
 .art-foot-cta a:hover { color: var(--blue); }
 
-/* =========================================================================
-   12. ToolCard — carte illustrée avec fenêtre masquée
-   ========================================================================= */
-.project-media {
-  display: flex;
-  align-items: center;
-}
-.project.reverse .project-media {
-  justify-content: flex-end;
-}
-/* Layout quand la card inclut son propre texte (withText=true) */
-.project-card-only {
-  padding: clamp(36px, 7vh, 80px) 0;
-  display: flex;
-  justify-content: center;
-}
-.tool-card {
-  width: 280px;
-  flex-shrink: 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-  box-shadow: 0 28px 64px -18px rgba(20,24,31,.38);
-  transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s;
-}
-.project-media a:hover .tool-card {
-  transform: translateY(-7px);
-  box-shadow: 0 44px 80px -18px rgba(20,24,31,.50);
-}
-
 /* Liste de projets — page /projets/ */
 .project-list-simple {
   list-style: none; margin: 0; padding: 0;
