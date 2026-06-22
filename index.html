@@ -40,11 +40,10 @@
   </section>
 
   <!-- ======================== PROJETS ======================== -->
-  <!-- ======================= OUTIL ======================= -->
-  <div class="tool-cta wrap">
-    <a class="btn" href="/outils/analyse-offre/">Diagnostiquer une offre d'emploi →</a>
-  </div>
+  <!-- ======================= OUTILS ======================= -->
+  <div class="tools-section" id="outils"></div>
 
+  <!-- ======================= PROJETS ======================= -->
   <div class="projects" id="projets" data-project-grid="all"></div>
 
   <!-- ======================== À PROPOS ======================== -->
@@ -106,6 +105,13 @@
       },
     ];
     window.STATUS_LABELS = { "disponible": "Disponible", "en-construction": "En construction", "vision": "Vision long terme" };
+
+    window.tools = [
+      { href: "/outils/analyse-offre/", slide: null },
+      { href: "/outils/analyse-offre/", slide: null },
+      { href: "/outils/analyse-offre/", slide: null },
+      { href: "/outils/analyse-offre/", slide: null },
+    ];
   </script>
   <script>
 /* ---- Carrousel unique : chaque article = une slide ---- */
@@ -190,6 +196,33 @@ function renderProjects() {
 }
 
 document.addEventListener("DOMContentLoaded", renderProjects);
+
+function renderTools() {
+  var container = document.getElementById("outils");
+  if (!container || !window.tools || !window.tools.length) return;
+
+  var col1 = "", col2 = "";
+  window.tools.forEach(function(t, i) {
+    var inner = t.slide
+      ? '<img src="' + t.slide + '" alt="" loading="lazy" />'
+      : '<div class="tool-card-ph"></div>';
+    var card = t.href
+      ? '<a class="tool-card" href="' + t.href + '">' + inner + '</a>'
+      : '<div class="tool-card">' + inner + '</div>';
+    if (i % 2 === 0) col1 += card;
+    else             col2 += card;
+  });
+
+  container.innerHTML =
+    '<div class="wrap">' +
+      '<h2 class="section-title">Mes outils :</h2>' +
+      '<div class="tools-grid">' +
+        '<div class="tools-col">' + col1 + '</div>' +
+        '<div class="tools-col tools-col--offset">' + col2 + '</div>' +
+      '</div>' +
+    '</div>';
+}
+document.addEventListener("DOMContentLoaded", renderTools);
   </script>
 </body>
 </html>
