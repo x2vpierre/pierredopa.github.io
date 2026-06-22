@@ -100,27 +100,99 @@
     window.STATUS_LABELS = { "disponible": "Disponible", "en-construction": "En construction", "vision": "Vision long terme" };
   </script>
   <script>
-function projectGridCard(project, index) {
-  var isReverse = index % 2 !== 0;
-  var reverseClass = isReverse ? " reverse" : "";
-  var imgSrc = project.image || "";
-  var frameImg = '<img src="' + imgSrc + '" alt="' + (imgSrc ? "Aperçu — " + project.title : "") + '" />';
-  var frame = '<div class="frame"><div class="frame-bar"><span></span><span></span><span></span></div>' + frameImg + "</div>";
-  var media = project.href ? '<a href="' + project.href + '">' + frame + "</a>" : frame;
-  var btn = project.href ? '<a class="btn" href="' + project.href + '">Voir le projet</a>' : "";
+/* ---- Rendu d'un projet avec carrousel ---- */
+function renderProjectItem(project) {
+  var uid = "c-" + project.slug;
+  var slides = project.slides || [];
+  var typeLabel = project.type === "case-study" ? "Étude de cas" : "Outil";
+
+  var slidesHtml = slides.length
+    ? slides.map(function(src, i) {
+        return '<div class="carousel-slide"><img src="' + src + '" alt="' + project.title + ' — diapo ' + (i+1) + '" loading="lazy" /></div>';
+      }).join("")
+    : '<div class="carousel-slide"><div class="carousel-placeholder">Slides à venir</div></div>';
+
+  var dotsHtml = slides.length > 1
+    ? '<div class="carousel-dots" id="' + uid + '-dots">' +
+        slides.map(function(_, i) {
+          return '<span class="carousel-dot' + (i === 0 ? " active" : "") + '" data-idx="' + i + '"></span>';
+        }).join("") +
+      '</div>'
+    : "";
+
+  var arrowsHtml = slides.length > 1
+    ? '<button class="carousel-arrow prev" aria-label="Précédent">‹</button>' +
+      '<button class="carousel-arrow next" aria-label="Suivant">›</button>'
+    : "";
+
+  var btn = project.href ? '<a class="btn" href="' + project.href + '">Lire l\'article</a>' : "";
+
   return (
-    '<div class="project' + reverseClass + ' wrap"><div class="project-grid">' +
-      '<div class="project-media">' + media + "</div>" +
-      '<div class="project-text"><h2 class="project-title">' + project.title + "</h2>" +
-      '<p class="project-desc">' + project.summary + "</p>" + btn + "</div>" +
-    "</div></div>"
+    '<div class="project-item wrap">' +
+      '<div class="carousel" id="' + uid + '">' +
+        '<div class="carousel-track" id="' + uid + '-track">' + slidesHtml + '</div>' +
+        arrowsHtml +
+      '</div>' +
+      dotsHtml +
+      '<div class="project-meta">' +
+        '<span class="project-label">' + typeLabel + '</span>' +
+        '<h2 class="project-title">' + project.title + '</h2>' +
+        '<p class="project-desc">' + project.summary + '</p>' +
+        btn +
+      '</div>' +
+    '</div>'
   );
 }
+
+/* ---- Interaction carrousel ---- */
+function initCarousel(uid) {
+  var track = document.getElementById(uid + "-track");
+  if (!track) return;
+  var dotsEl  = document.getElementById(uid + "-dots");
+  var dots    = dotsEl ? Array.from(dotsEl.querySelectorAll(".carousel-dot")) : [];
+  var carousel = document.getElementById(uid);
+
+  function updateDots() {
+    if (!dots.length) return;
+    var idx = Math.round(track.scrollLeft / track.offsetWidth);
+    dots.forEach(function(d, i) { d.classList.toggle("active", i === idx); });
+  }
+  track.addEventListener("scroll", updateDots, { passive: true });
+
+  dots.forEach(function(dot) {
+    dot.addEventListener("click", function() {
+      track.scrollTo({ left: parseInt(dot.dataset.idx) * track.offsetWidth, behavior: "smooth" });
+    });
+  });
+
+  var prev = carousel.querySelector(".prev");
+  var next = carousel.querySelector(".next");
+  if (prev) prev.addEventListener("click", function() { track.scrollBy({ left: -track.offsetWidth, behavior: "smooth" }); });
+  if (next) next.addEventListener("click", function() { track.scrollBy({ left:  track.offsetWidth, behavior: "smooth" }); });
+
+  /* Drag desktop */
+  var dragging = false, startX, startScroll;
+  track.addEventListener("mousedown", function(e) {
+    dragging = true; startX = e.pageX; startScroll = track.scrollLeft;
+    track.classList.add("is-dragging"); e.preventDefault();
+  });
+  document.addEventListener("mousemove", function(e) {
+    if (!dragging) return;
+    track.scrollLeft = startScroll - (e.pageX - startX);
+  });
+  document.addEventListener("mouseup", function() {
+    if (!dragging) return;
+    dragging = false; track.classList.remove("is-dragging");
+  });
+}
+
+/* ---- Rendu global ---- */
 function renderProjects() {
   document.querySelectorAll("[data-project-grid]").forEach(function(container) {
     var filter = container.getAttribute("data-project-grid");
     var list = window.projects.filter(function(p) { return filter === "all" || p.type === filter; });
-    container.innerHTML = list.map(projectGridCard).join("\n");
+    container.innerHTML = list.map(renderProjectItem).join("\n");
+    list.forEach(function(p) { initCarousel("c-" + p.slug); });
   });
 }
 document.addEventListener("DOMContentLoaded", renderProjects);
