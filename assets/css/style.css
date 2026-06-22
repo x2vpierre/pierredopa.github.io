@@ -69,7 +69,7 @@ p   { margin: 0; }
 }
 .brand {
   font-family: var(--font-display); font-weight: 700;
-  font-size: clamp(20px, 2.2vw, 26px); letter-spacing: -.01em;
+  font-size: clamp(22px, 2.4vw, 29px); letter-spacing: -.01em;
 }
 
 /* Nav pages intérieures */
@@ -145,7 +145,7 @@ img:not([src]), img[src=""] { background: #f1f2f4; }
 /* =========================================================================
    6. Sections génériques
    ========================================================================= */
-.section { padding: clamp(40px, 8vh, 80px) 0; }
+.section { padding: clamp(28px, 5vh, 52px) 0; }
 section[id], div[id].section { scroll-margin-top: 30px; }
 
 /* =========================================================================
@@ -153,7 +153,7 @@ section[id], div[id].section { scroll-margin-top: 30px; }
    ========================================================================= */
 /* ---- Section outils ---- */
 .tools-section {
-  padding: clamp(40px, 7vh, 72px) 0;
+  padding: clamp(40px, 7vh, 72px) 0 clamp(16px, 3vh, 28px);
 }
 .section-title {
   font-family: var(--font-display); font-weight: 700;
@@ -303,7 +303,7 @@ section[id], div[id].section { scroll-margin-top: 30px; }
 /* =========================================================================
    9. Contact
    ========================================================================= */
-.contact { padding: clamp(30px, 6vh, 70px) 0; }
+.contact { padding: clamp(16px, 3vh, 36px) 0; }
 .contact h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 4vw, 48px); letter-spacing: -.015em; }
 .contact a { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; transition: color .18s; }
 .contact a:hover { color: var(--blue); }
