@@ -42,7 +42,7 @@ OFFRE :
     if (!r.ok) {
       const err = await r.text();
       console.error('Anthropic error:', err);
-      return res.status(502).json({ error: 'Erreur API' });
+      return res.status(502).json({ error: 'Erreur API', detail: err });
     }
 
     const data = await r.json();
