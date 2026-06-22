@@ -85,72 +85,59 @@
   <script>
     window.projects = [
       {
-        type: "case-study", slug: "entretiens-structures",
-        title: "Entretiens structurés",
-        summary: "Comment j'ai arrêté de recruter au feeling — la grille, les ancres comportementales, ce que ça a changé.",
-        status: "disponible", href: "/articles/entretiens-structures/", image: null,
+        slug: "entretiens-structures",
+        href: "/articles/entretiens-structures/",
+        slide: null,
       },
       {
-        type: "case-study", slug: "ariane",
-        title: "Ariane",
-        summary: "Un agent IA construit pour des recruteurs qui n'ouvraient jamais ChatGPT. Ce que ça m'a appris sur l'adoption.",
-        status: "disponible", href: "/articles/ariane/", image: null,
+        slug: "ariane",
+        href: "/articles/ariane/",
+        slide: null,
       },
     ];
     window.STATUS_LABELS = { "disponible": "Disponible", "en-construction": "En construction", "vision": "Vision long terme" };
   </script>
   <script>
-/* ---- Rendu d'un projet avec carrousel ---- */
-function renderProjectItem(project) {
-  var uid = "c-" + project.slug;
-  var slides = project.slides || [];
-  var typeLabel = project.type === "case-study" ? "Étude de cas" : "Outil";
+/* ---- Carrousel unique : chaque article = une slide ---- */
+function renderProjects() {
+  var container = document.querySelector("[data-project-grid]");
+  if (!container) return;
 
-  var slidesHtml = slides.length
-    ? slides.map(function(src, i) {
-        return '<div class="carousel-slide"><img src="' + src + '" alt="' + project.title + ' — diapo ' + (i+1) + '" loading="lazy" /></div>';
-      }).join("")
-    : '<div class="carousel-slide"><div class="carousel-placeholder">Slides à venir</div></div>';
+  var slidesHtml = window.projects.map(function(p) {
+    var inner = p.slide
+      ? '<img src="' + p.slide + '" alt="" loading="lazy" />'
+      : '<div class="carousel-placeholder"></div>';
+    return p.href
+      ? '<a class="carousel-slide" href="' + p.href + '">' + inner + '</a>'
+      : '<div class="carousel-slide">' + inner + '</div>';
+  }).join("");
 
-  var dotsHtml = slides.length > 1
-    ? '<div class="carousel-dots" id="' + uid + '-dots">' +
-        slides.map(function(_, i) {
+  var n = window.projects.length;
+  var dotsHtml = n > 1
+    ? '<div class="carousel-dots" id="pc-dots">' +
+        window.projects.map(function(_, i) {
           return '<span class="carousel-dot' + (i === 0 ? " active" : "") + '" data-idx="' + i + '"></span>';
         }).join("") +
       '</div>'
     : "";
 
-  var arrowsHtml = slides.length > 1
+  var arrowsHtml = n > 1
     ? '<button class="carousel-arrow prev" aria-label="Précédent">‹</button>' +
       '<button class="carousel-arrow next" aria-label="Suivant">›</button>'
     : "";
 
-  var btn = project.href ? '<a class="btn" href="' + project.href + '">Lire l\'article</a>' : "";
+  container.innerHTML =
+    '<div class="carousel" id="pc">' +
+      '<div class="carousel-track" id="pc-track">' + slidesHtml + '</div>' +
+      arrowsHtml +
+    '</div>' +
+    dotsHtml;
 
-  return (
-    '<div class="project-item wrap">' +
-      '<div class="carousel" id="' + uid + '">' +
-        '<div class="carousel-track" id="' + uid + '-track">' + slidesHtml + '</div>' +
-        arrowsHtml +
-      '</div>' +
-      dotsHtml +
-      '<div class="project-meta">' +
-        '<span class="project-label">' + typeLabel + '</span>' +
-        '<h2 class="project-title">' + project.title + '</h2>' +
-        '<p class="project-desc">' + project.summary + '</p>' +
-        btn +
-      '</div>' +
-    '</div>'
-  );
-}
-
-/* ---- Interaction carrousel ---- */
-function initCarousel(uid) {
-  var track = document.getElementById(uid + "-track");
-  if (!track) return;
-  var dotsEl  = document.getElementById(uid + "-dots");
+  /* --- Interactions --- */
+  var track   = document.getElementById("pc-track");
+  var dotsEl  = document.getElementById("pc-dots");
   var dots    = dotsEl ? Array.from(dotsEl.querySelectorAll(".carousel-dot")) : [];
-  var carousel = document.getElementById(uid);
+  var carousel = document.getElementById("pc");
 
   function updateDots() {
     if (!dots.length) return;
@@ -170,31 +157,27 @@ function initCarousel(uid) {
   if (prev) prev.addEventListener("click", function() { track.scrollBy({ left: -track.offsetWidth, behavior: "smooth" }); });
   if (next) next.addEventListener("click", function() { track.scrollBy({ left:  track.offsetWidth, behavior: "smooth" }); });
 
-  /* Drag desktop */
-  var dragging = false, startX, startScroll;
+  /* Drag souris (desktop) */
+  var dragging = false, startX, startScroll, moved;
   track.addEventListener("mousedown", function(e) {
-    dragging = true; startX = e.pageX; startScroll = track.scrollLeft;
-    track.classList.add("is-dragging"); e.preventDefault();
+    dragging = true; moved = false;
+    startX = e.pageX; startScroll = track.scrollLeft;
+    track.classList.add("is-dragging");
   });
   document.addEventListener("mousemove", function(e) {
     if (!dragging) return;
-    track.scrollLeft = startScroll - (e.pageX - startX);
+    var dx = e.pageX - startX;
+    if (Math.abs(dx) > 4) moved = true;
+    track.scrollLeft = startScroll - dx;
   });
-  document.addEventListener("mouseup", function() {
+  document.addEventListener("mouseup", function(e) {
     if (!dragging) return;
     dragging = false; track.classList.remove("is-dragging");
-  });
+    /* Annule le clic si c'était un drag */
+    if (moved) e.stopPropagation();
+  }, true);
 }
 
-/* ---- Rendu global ---- */
-function renderProjects() {
-  document.querySelectorAll("[data-project-grid]").forEach(function(container) {
-    var filter = container.getAttribute("data-project-grid");
-    var list = window.projects.filter(function(p) { return filter === "all" || p.type === filter; });
-    container.innerHTML = list.map(renderProjectItem).join("\n");
-    list.forEach(function(p) { initCarousel("c-" + p.slug); });
-  });
-}
 document.addEventListener("DOMContentLoaded", renderProjects);
   </script>
 </body>
