@@ -113,24 +113,29 @@
     ];
   </script>
   <script>
-/* ---- Carrousel unique : chaque article = une slide ---- */
+/* ---- Carrousel peek + loop infini ---- */
 function renderProjects() {
   var container = document.querySelector("[data-project-grid]");
   if (!container) return;
+  var projs = window.projects;
+  var n = projs.length;
 
-  var slidesHtml = window.projects.map(function(p) {
+  function makeSlide(p) {
     var inner = p.slide
       ? '<img src="' + p.slide + '" alt="" loading="lazy" />'
       : '<div class="carousel-placeholder"></div>';
-    return p.href
-      ? '<a class="carousel-slide" href="' + p.href + '">' + inner + '</a>'
-      : '<div class="carousel-slide">' + inner + '</div>';
-  }).join("");
+    return '<div class="carousel-slide" data-href="' + (p.href || '') + '">' + inner + '</div>';
+  }
 
-  var n = window.projects.length;
+  /* clones pour le loop infini */
+  var slidesHtml =
+    makeSlide(projs[n - 1]) +
+    projs.map(makeSlide).join("") +
+    makeSlide(projs[0]);
+
   var dotsHtml = n > 1
     ? '<div class="carousel-dots" id="pc-dots">' +
-        window.projects.map(function(_, i) {
+        projs.map(function(_, i) {
           return '<span class="carousel-dot' + (i === 0 ? " active" : "") + '" data-idx="' + i + '"></span>';
         }).join("") +
       '</div>'
@@ -149,49 +154,103 @@ function renderProjects() {
     '</div>' +
     dotsHtml;
 
-  /* --- Interactions --- */
-  var track   = document.getElementById("pc-track");
-  var dotsEl  = document.getElementById("pc-dots");
-  var dots    = dotsEl ? Array.from(dotsEl.querySelectorAll(".carousel-dot")) : [];
   var carousel = document.getElementById("pc");
+  var track    = document.getElementById("pc-track");
+  var dotsEl   = document.getElementById("pc-dots");
+  var dots     = dotsEl ? Array.from(dotsEl.querySelectorAll(".carousel-dot")) : [];
+  var slides   = Array.from(track.querySelectorAll(".carousel-slide"));
+  var current  = 1; /* 0 = clone_last, 1..n = réels, n+1 = clone_first */
+  var inTrans  = false;
 
-  function updateDots() {
-    if (!dots.length) return;
-    var idx = Math.round(track.scrollLeft / track.offsetWidth);
-    dots.forEach(function(d, i) { d.classList.toggle("active", i === idx); });
+  function dim() {
+    var cW    = carousel.offsetWidth;
+    var cardW = Math.round(cW * 0.80);
+    var mg    = 8; /* margin gauche ET droite par slide */
+    var step  = cardW + mg * 2;
+    var x0    = (cW - cardW) / 2 - mg; /* offset de base pour idx=0 */
+    return { cardW: cardW, step: step, x0: x0 };
   }
-  track.addEventListener("scroll", updateDots, { passive: true });
 
-  dots.forEach(function(dot) {
-    dot.addEventListener("click", function() {
-      track.scrollTo({ left: parseInt(dot.dataset.idx) * track.offsetWidth, behavior: "smooth" });
+  function setWidths() {
+    var d = dim();
+    slides.forEach(function(s) { s.style.width = d.cardW + "px"; });
+  }
+
+  function goTo(idx, anim) {
+    var d = dim();
+    track.style.transition = anim
+      ? "transform .42s cubic-bezier(.25,.46,.45,.94)"
+      : "none";
+    track.style.transform = "translateX(" + (d.x0 - idx * d.step) + "px)";
+    if (!anim) track.offsetHeight; /* force reflow */
+    var ri = ((idx - 1) % n + n) % n;
+    dots.forEach(function(dot, i) { dot.classList.toggle("active", i === ri); });
+  }
+
+  function next() { if (inTrans) return; inTrans = true; current++; goTo(current, true); }
+  function prev() { if (inTrans) return; inTrans = true; current--; goTo(current, true); }
+
+  track.addEventListener("transitionend", function() {
+    if (current === 0)     { current = n; goTo(current, false); }
+    if (current === n + 1) { current = 1; goTo(current, false); }
+    inTrans = false;
+  });
+
+  /* Flèches */
+  var btnP = carousel.querySelector(".prev");
+  var btnN = carousel.querySelector(".next");
+  if (btnP) btnP.addEventListener("click", prev);
+  if (btnN) btnN.addEventListener("click", next);
+
+  /* Dots */
+  dots.forEach(function(dot, i) {
+    dot.addEventListener("click", function() { current = i + 1; goTo(current, true); });
+  });
+
+  /* Drag (souris + touch) */
+  var sx, sy, dragging = false, moved = false;
+
+  function dStart(x, y) {
+    dragging = true; moved = false; sx = x; sy = y;
+    track.style.transition = "none";
+    track.classList.add("is-dragging");
+  }
+  function dMove(x, y) {
+    if (!dragging) return;
+    var dx = x - sx, dy = y - sy;
+    if (!moved && Math.abs(dy) > Math.abs(dx)) { dragging = false; track.classList.remove("is-dragging"); return; }
+    if (Math.abs(dx) > 5) moved = true;
+    var d = dim();
+    track.style.transform = "translateX(" + (d.x0 - current * d.step + dx) + "px)";
+  }
+  function dEnd(x) {
+    if (!dragging) return;
+    dragging = false; track.classList.remove("is-dragging");
+    if (Math.abs(x - sx) > 50) { if (x < sx) next(); else prev(); }
+    else { goTo(current, true); inTrans = false; }
+  }
+
+  track.addEventListener("mousedown", function(e) { e.preventDefault(); dStart(e.pageX, e.pageY); });
+  document.addEventListener("mousemove", function(e) { dMove(e.pageX, e.pageY); });
+  document.addEventListener("mouseup",   function(e) { dEnd(e.pageX); });
+
+  track.addEventListener("touchstart", function(e) { dStart(e.touches[0].pageX, e.touches[0].pageY); }, { passive: true });
+  track.addEventListener("touchmove",  function(e) { dMove(e.touches[0].pageX, e.touches[0].pageY); }, { passive: true });
+  track.addEventListener("touchend",   function(e) { dEnd(e.changedTouches[0].pageX); });
+
+  /* Clic sur slide → navigation (seulement si pas de drag) */
+  slides.forEach(function(slide) {
+    slide.addEventListener("click", function() {
+      if (moved) return;
+      var href = slide.getAttribute("data-href");
+      if (href) window.location.href = href;
     });
   });
 
-  var prev = carousel.querySelector(".prev");
-  var next = carousel.querySelector(".next");
-  if (prev) prev.addEventListener("click", function() { track.scrollBy({ left: -track.offsetWidth, behavior: "smooth" }); });
-  if (next) next.addEventListener("click", function() { track.scrollBy({ left:  track.offsetWidth, behavior: "smooth" }); });
-
-  /* Drag souris (desktop) */
-  var dragging = false, startX, startScroll, moved;
-  track.addEventListener("mousedown", function(e) {
-    dragging = true; moved = false;
-    startX = e.pageX; startScroll = track.scrollLeft;
-    track.classList.add("is-dragging");
-  });
-  document.addEventListener("mousemove", function(e) {
-    if (!dragging) return;
-    var dx = e.pageX - startX;
-    if (Math.abs(dx) > 4) moved = true;
-    track.scrollLeft = startScroll - dx;
-  });
-  document.addEventListener("mouseup", function(e) {
-    if (!dragging) return;
-    dragging = false; track.classList.remove("is-dragging");
-    /* Annule le clic si c'était un drag */
-    if (moved) e.stopPropagation();
-  }, true);
+  /* Init + resize */
+  setWidths();
+  goTo(current, false);
+  window.addEventListener("resize", function() { setWidths(); goTo(current, false); });
 }
 
 document.addEventListener("DOMContentLoaded", renderProjects);
