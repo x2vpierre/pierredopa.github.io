@@ -311,7 +311,7 @@ section[id], div[id].section { scroll-margin-top: 30px; }
 /* =========================================================================
    10. Footer
    ========================================================================= */
-.footer { padding: clamp(30px, 5vh, 60px) 0 130px; }
+.footer { padding: clamp(30px, 5vh, 60px) 0 clamp(24px, 4vh, 40px); }
 .footer p { font-size: 15px; color: var(--gray); line-height: 1.6; }
 .footer a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
 
