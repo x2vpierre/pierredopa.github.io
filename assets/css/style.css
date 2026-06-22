@@ -159,8 +159,8 @@ section[id], div[id].section { scroll-margin-top: 30px; }
 /* Carrousel centré, portrait 4:5, max 440px */
 .carousel {
   position: relative;
-  width: 100%;
-  max-width: 440px;
+  width: 80%;
+  max-width: 352px;
   margin: 0 auto;
 }
 
